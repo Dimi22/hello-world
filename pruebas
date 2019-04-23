@@ -1,0 +1,70 @@
+import numpy as np
+In [2]:
+def FloydWarshall(W):
+    n = W.shape[0]
+    D_list = []#Save each D^{(k)} matrix
+    D_list.append(W[:,:])#D^{(0)}
+    for k in range(n):        
+        D_k = D_list[k][:,:]
+        for i in range(n):
+            for j in range(n):
+                D_k[i,j] = min(D_list[k][i,j], D_list[k][i,k]+D_list[k][k,j])        
+        D_list.append(np.copy(D_k))
+    return D_k, D_list
+In [3]:
+W = np.matrix(
+    [[0., 3., 8., float('inf'), -4.],
+     [float('inf'), 0., float('inf'), 1., 7.],
+     [float('inf'), 4., 0., float('inf'), float('inf')],
+     [2, float('inf'), -5., 0., float('inf')],
+     [float('inf'), float('inf'), float('inf'), 6., 0.],
+    ]
+)
+print W
+[[  0.   3.   8.  inf  -4.]
+ [ inf   0.  inf   1.   7.]
+ [ inf   4.   0.  inf  inf]
+ [  2.  inf  -5.   0.  inf]
+ [ inf  inf  inf   6.   0.]]
+In [4]:
+D_n, Ds = FloydWarshall(W)
+In [5]:
+print D_n
+[[ 0.  1. -3.  2. -4.]
+ [ 3.  0. -4.  1. -1.]
+ [ 7.  4.  0.  5.  3.]
+ [ 2. -1. -5.  0. -2.]
+ [ 8.  5.  1.  6.  0.]]
+In [6]:
+for D in Ds:
+    print D
+[[  0.   3.   8.  inf  -4.]
+ [ inf   0.  inf   1.   7.]
+ [ inf   4.   0.  inf  inf]
+ [  2.   5.  -5.   0.  -2.]
+ [ inf  inf  inf   6.   0.]]
+[[  0.   3.   8.   4.  -4.]
+ [ inf   0.  inf   1.   7.]
+ [ inf   4.   0.   5.  11.]
+ [  2.   5.  -5.   0.  -2.]
+ [ inf  inf  inf   6.   0.]]
+[[  0.   3.   8.   4.  -4.]
+ [ inf   0.  inf   1.   7.]
+ [ inf   4.   0.   5.  11.]
+ [  2.  -1.  -5.   0.  -2.]
+ [ inf  inf  inf   6.   0.]]
+[[ 0.  3. -1.  4. -4.]
+ [ 3.  0. -4.  1. -1.]
+ [ 7.  4.  0.  5.  3.]
+ [ 2. -1. -5.  0. -2.]
+ [ 8.  5.  1.  6.  0.]]
+[[ 0.  1. -3.  2. -4.]
+ [ 3.  0. -4.  1. -1.]
+ [ 7.  4.  0.  5.  3.]
+ [ 2. -1. -5.  0. -2.]
+ [ 8.  5.  1.  6.  0.]]
+[[ 0.  1. -3.  2. -4.]
+ [ 3.  0. -4.  1. -1.]
+ [ 7.  4.  0.  5.  3.]
+ [ 2. -1. -5.  0. -2.]
+ [ 8.  5.  1.  6.  0.]]
